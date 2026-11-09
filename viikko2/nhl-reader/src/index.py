@@ -6,6 +6,7 @@ def main():
     response = requests.get(url).json()
 
     players = []
+    finns = []
 
     for player_dict in response:
         player = Player(player_dict)
@@ -15,8 +16,10 @@ def main():
 
     for player in players:
         if player.nationality == "FIN":
-            print(player)
+            finns.append(player)
 
+    for player in sorted(finns, key=lambda p: p.points, reverse=True):
+        print(player)
 
 if __name__ == "__main__":
     main()
