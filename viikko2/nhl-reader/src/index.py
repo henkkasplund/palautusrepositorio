@@ -11,24 +11,36 @@ NATIONALITIES = ["USA", "FIN", "CAN", "SWE", "CZE", "RUS", "SLO", "FRA",
                  "GBR", "SVK", "DEN", "NED", "AUT", "BLR", "GER", "SUI",
                  "NOR", "UZB", "LAT", "AUS"]
 
+
 def main():
     season = Prompt.ask("Season", choices=SEASONS, default="2024-25")
 
     url = f"https://studies.cs.helsinki.fi/nhlstats/{season}/players"
-    reader = PlayerReader(url)
-    stats = PlayerStats(reader)
+    stats = PlayerStats(PlayerReader(url))
 
     while True:
-        nationality = Prompt.ask("Nationality", choices=NATIONALITIES, default="")
-        if nationality == "":
+        search_type = Prompt.ask(
+            "Search by", choices=["Nationality", "Team", "Quit"], default="Nationality"
+        )
+        if search_type == "Quit":
             break
 
-        players = stats.top_scorers_by_nationality(nationality)
+        value, players = ask_players(stats, search_type)
+        Console().print(create_table(season, search_type.lower(), value, players))
 
-        Console().print(create_table(season, nationality, players))
 
-def create_table(season, nationality, players):
-    table = Table(title=f"Season {season} players from {nationality}")
+def ask_players(stats, search_type):
+    if search_type == "Nationality":
+        value = Prompt.ask("Nationality", choices=NATIONALITIES)
+        return value, stats.top_scorers_by_nationality(value)
+
+    teams = sorted({team for player in stats.players for team in player.teams})
+    value = Prompt.ask("Team", choices=teams)
+    return value, stats.top_scorers_by_team(value)
+
+
+def create_table(season, search_type, value, players):
+    table = Table(title=f"Season {season} players by {search_type}: {value}")
     table.add_column("Name", style="cyan")
     table.add_column("Teams", style="magenta")
     table.add_column("Goals", justify="right", style="green")

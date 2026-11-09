@@ -10,5 +10,9 @@ class Player:
     def points(self):
         return self.goals + self.assists
 
+    @property
+    def teams(self):
+        return [team.strip() for team in self.team.split(",")]
+
     def __str__(self):
         return f"{self.name:20} team {self.team:20} {self.goals:>2} + {self.assists:>3} = {self.points:3}"
