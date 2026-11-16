@@ -61,6 +61,20 @@ Register With Username That Is Already In Use
     Click  button >> text=Register
     Register Should Fail With Message  Username is already taken
 
+Register With Matching Password And Confirmation
+    Set Username  sami
+    Set Password  sami1234
+    Set Password Confirmation  sami1234
+    Click  button >> text=Register
+    Register Should Succeed
+
+Register With Different Password And Confirmation
+    Set Username  sami
+    Set Password  sami1234
+    Set Password Confirmation  sami5678
+    Click  button >> text=Register
+    Register Should Fail With Message  Passwords do not match
+
 *** Keywords ***
 Register Should Succeed
     Welcome Page Should Be Open
