@@ -51,6 +51,9 @@ class UserService:
                 "Password must contain at least one number or special character"
             )
 
+        if password != password_confirmation:
+            raise UserInputError("Passwords do not match")
+
         if self._user_repository.find_by_username(username):
             raise UserInputError("Username is already taken")
 
