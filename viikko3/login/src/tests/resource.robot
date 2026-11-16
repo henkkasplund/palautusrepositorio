@@ -30,3 +30,24 @@ Main Page Should Be Open
 Go To Login Page
     Go To  ${LOGIN_URL}
 
+Set Username
+    [Arguments]  ${username}
+    Fill Text  id=username  ${username}
+
+Set Password
+    [Arguments]  ${password}
+    Fill Secret  id=password  $password
+
+Set Password Confirmation
+    [Arguments]  ${password_confirmation}
+    Fill Secret  id=password_confirmation  $password_confirmation
+
+Go To Register Page
+    Go To  ${REGISTER_URL}
+
+
+Go To Starting Page
+    Go To  ${HOME_URL}
+
+Register Page Should Be Open
+    Get Title  ==  Register
